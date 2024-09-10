@@ -1,60 +1,45 @@
+//
+//  UserListViewModelTests.swift
+//  UserListTests
+//
+//  Created by Bruno Evrard on 02/09/2024.
+//
+
 import XCTest
 @testable import UserList
 
-final class UserListRepositoryTests: XCTestCase {
-    // Happy path test case
-    func testFetchUsersSuccess() async throws {
+final class UserListViewModelTests: XCTestCase {
+
+    
+    
+    func testFetchUsersModeleView() async throws {
         // Given
-        let repository = UserListRepository(executeDataRequest: mockExecuteDataRequest)
         let quantity = 2
+        let repository = UserListRepository(executeDataRequest: mockExecuteDataRequest)
+        let viewModel =  UserListViewModel(repository: repository, quantity: quantity)
+        
         
         // When
-        let users = try await repository.fetchUsers(quantity: quantity)
+        try await viewModel.fetchUsers()
         
         // Then
-        XCTAssertEqual(users.count, quantity)
-        XCTAssertEqual(users[0].name.first, "John")
-        XCTAssertEqual(users[0].name.last, "Doe")
-        XCTAssertEqual(users[0].dob.age, 31)
-        XCTAssertEqual(users[0].picture.large, "https://example.com/large.jpg")
+        XCTAssertEqual(viewModel.users.count, quantity)
+        XCTAssertEqual(viewModel.users[0].name.first, "John")
+        XCTAssertEqual(viewModel.users[0].name.last, "Doe")
+        XCTAssertEqual(viewModel.users[0].dob.age, 31)
+        XCTAssertEqual(viewModel.users[0].picture.large, "https://example.com/large.jpg")
         
-        XCTAssertEqual(users[1].name.first, "Jane")
-        XCTAssertEqual(users[1].name.last, "Smith")
-        XCTAssertEqual(users[1].dob.age, 26)
-        XCTAssertEqual(users[1].picture.medium, "https://example.com/medium.jpg")
+        XCTAssertEqual(viewModel.users[1].name.first, "Jane")
+        XCTAssertEqual(viewModel.users[1].name.last, "Smith")
+        XCTAssertEqual(viewModel.users[1].dob.age, 26)
+        XCTAssertEqual(viewModel.users[1].picture.medium, "https://example.com/medium.jpg")
     }
-    
-    // Unhappy path test case: Invalid JSON response
-    func testFetchUsersInvalidJSONResponse() async throws {
-        // Given
-        let invalidJSONData = "invalid JSON".data(using: .utf8)!
-        let invalidJSONResponse = HTTPURLResponse(
-            url: URL(string: "https://example.com")!,
-            statusCode: 200,
-            httpVersion: nil,
-            headerFields: nil
-        )!
 
-        let mockExecuteDataRequest: (URLRequest) async throws -> (Data, URLResponse) = { _ in
-            return (invalidJSONData, invalidJSONResponse)
-        }
-        
-        let repository = UserListRepository(executeDataRequest: mockExecuteDataRequest)
-        
-        // When
-        do {
-            _ = try await repository.fetchUsers(quantity: 2)
-            XCTFail("Response should fail")
-        } catch {
-            // Then
-            XCTAssertTrue(error is DecodingError)
-        }
-    }
     
     
 }
 
-private extension UserListRepositoryTests {
+private extension UserListViewModelTests {
     // Define a mock for executeDataRequest that returns predefined data
     func mockExecuteDataRequest(_ request: URLRequest) async throws -> (Data, URLResponse) {
         // Create mock data with a sample JSON response
@@ -101,6 +86,4 @@ private extension UserListRepositoryTests {
         let response = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
         return (data, response)
     }
-    
-    
 }
