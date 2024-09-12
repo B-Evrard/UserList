@@ -20,7 +20,7 @@ struct UserListDetailView: View {
                     userView(user: user, viewModel: viewModel, isList: isList)
                 }.onAppear {
                     Task {
-                        try await viewModel.fetchUsersIfMoreData(currentItem: user)
+                        await viewModel.fetchUsersIfMoreData(currentItem: user)
                     }
                 }
             } else {
@@ -28,7 +28,7 @@ struct UserListDetailView: View {
                     userView(user: user, viewModel: viewModel, isList: isList)
                 }.onAppear {
                     Task {
-                        try await viewModel.fetchUsersIfMoreData(currentItem: user)
+                        await viewModel.fetchUsersIfMoreData(currentItem: user)
                     }
                 }
             }

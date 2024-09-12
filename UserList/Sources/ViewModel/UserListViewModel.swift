@@ -27,7 +27,7 @@ final class UserListViewModel: ObservableObject {
     }
 
     @MainActor
-    func fetchUsers() async throws{
+    func fetchUsers() async {
         isLoading = true
            
         do {
@@ -47,15 +47,15 @@ final class UserListViewModel: ObservableObject {
         return !isLoading && item.id == lastItem.id
     }
 
-   
-    func reloadUsers() async throws{
+    @MainActor
+    func reloadUsers() async {
         users.removeAll()
-        try await fetchUsers()
+        await fetchUsers()
     }
     
-    func fetchUsersIfMoreData(currentItem item: User) async throws {
+    func fetchUsersIfMoreData(currentItem item: User) async {
         if shouldLoadMoreData(currentItem: item) {
-            try await fetchUsers()
+            await fetchUsers()
         }
     }
     

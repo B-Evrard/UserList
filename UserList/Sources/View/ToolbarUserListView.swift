@@ -26,7 +26,7 @@ struct ToolbarUserListView: ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
             Button(action: {
                 Task {
-                    try await viewModel.reloadUsers()
+                    await viewModel.reloadUsers()
                 }
                 
             }) {

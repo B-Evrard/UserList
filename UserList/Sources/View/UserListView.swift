@@ -12,11 +12,8 @@ struct UserListView: View {
                 UserListGridView(viewModel: viewModel)
             }
         }
-        .onAppear {
-            Task {
-                try await viewModel.fetchUsers()
-            }
-            
+        .task {
+            await viewModel.fetchUsers()
         }
     }
     
