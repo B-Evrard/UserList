@@ -42,7 +42,7 @@ final class UserListViewModelTests: XCTestCase {
             httpVersion: nil,
             headerFields: nil
         )!
-
+        
         let mockExecuteDataRequest: (URLRequest) async throws -> (Data, URLResponse) = { _ in
             return (invalidJSONData, invalidJSONResponse)
         }
@@ -52,10 +52,8 @@ final class UserListViewModelTests: XCTestCase {
         
         // When
         await viewModel.fetchUsers()
-        if (viewModel.users.isEmpty) {
-            XCTAssertTrue(true)
-        }
         
+        XCTAssert(viewModel.users.isEmpty)
         
     }
     
@@ -141,9 +139,8 @@ final class UserListViewModelTests: XCTestCase {
         if let currentItem = viewModel.users.last
         {
             viewModel.users.removeAll()
-            if !viewModel.shouldLoadMoreData(currentItem: currentItem) {
-                XCTAssert(true)
-            }
+            XCTAssert(!viewModel.shouldLoadMoreData(currentItem: currentItem))
+            
         }
         
     }

@@ -22,7 +22,7 @@ struct UserListGridView: View {
         .toolbar {
             ToolbarUserListView(viewModel: viewModel)
         }
-        // MARK
+        
     }
 }
 
